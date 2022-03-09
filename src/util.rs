@@ -4,7 +4,7 @@ pub fn transform_coord(x: u32, y: u32, cw: i16, ch: i16) -> (i16, i16) {
   }
   (
       (x as i16) - (cw / 2),
-      (y as i16) - (ch / 2)
+      -(y as i16) + (ch / 2)
   )
 }
 
@@ -17,7 +17,14 @@ mod test {
   fn transform_coordinates_with_valid_values() {
     let (x, y) = transform_coord(0, 0, 10, 10);
     assert_eq!(x, -5);
-    assert_eq!(y, -5);
+    assert_eq!(y, 5);
+  }
+
+  #[test]
+  fn transform_coordinatess_with_valid_values() {
+    let (x, y) = transform_coord(0, 0, 10, 10);
+    assert_eq!(x, -5);
+    assert_eq!(y, 5);
   }
   // function returns error
   // x < 0 and y < 0 are covered by the type
