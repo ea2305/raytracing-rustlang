@@ -1,6 +1,6 @@
 use crate::linear_math::Vec3;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Sphere {
   pub center: Vec3,
   pub color: Vec3,
