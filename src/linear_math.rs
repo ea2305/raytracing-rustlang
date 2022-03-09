@@ -1,75 +1,61 @@
 use std::fmt::{ Result, Formatter, Display };
-use std::ops::{ Add, Mul, Sub };
 
-#[derive(Default)]
-pub struct Vec3<T> {
-    pub x: T,
-    pub y: T,
-    pub z: T
+#[derive(Clone, Default)]
+pub struct Vec3 {
+  pub x: f64,
+  pub y: f64,
+  pub z: f64
 }
 
-impl<T: Display> Display for Vec3<T> {
-    fn fmt(&self, f: &mut Formatter) -> Result {
-        write!(f, "[{},{},{}]", self.x, self.y, self.z)
-    }
-}
-
-impl<T> Vec3<T> {
-  pub fn new(x: T, y: T, z: T) -> Self {
-      Self { x, y, z }
+impl Display for Vec3 {
+  fn fmt(&self, f: &mut Formatter) -> Result {
+    write!(f, "[{},{},{}]", self.x, self.y, self.z)
   }
 }
 
-pub fn add<T>(a: Vec3<T>, b: Vec3<T>) -> Vec3<T> where 
-  T: Copy + 
-  Add<T, Output = T> 
-{
+impl Vec3 {
+  pub fn new(x: f64, y: f64, z: f64) -> Self {
+    Self { x, y, z }
+  }
+}
+
+pub fn add(a: Vec3, b: Vec3) -> Vec3 {
   Vec3::new(
-      a.x + b.x,
-      a.y + b.y,
-      a.z + b.z
+    a.x + b.x,
+    a.y + b.y,
+    a.z + b.z
   )
 }
 
-pub fn add_scalar<T>(a: Vec3<T>, s: T) -> Vec3<T> where 
-  T: Copy + Add<T, Output = T> 
-{
+pub fn add_scalar(a: Vec3, s: f64) -> Vec3 {
   Vec3::new(
-      a.x + s,
-      a.y + s,
-      a.z + s
+    a.x + s,
+    a.y + s,
+    a.z + s
   )
 }
 
-pub fn sub<T>(a: Vec3<T>, b: Vec3<T>) -> Vec3<T> where 
-  T: Copy +  Sub<T, Output = T> 
-{
+pub fn sub(a: &Vec3, b: &Vec3) -> Vec3 {
   Vec3::new(
-      a.x - b.x,
-      a.y - b.y,
-      a.z - b.z
+    a.x - b.x,
+    a.y - b.y,
+    a.z - b.z
   )
 }
 
-pub fn sub_scalar<T>(a: Vec3<T>, s: T) -> Vec3<T> where 
-  T: Copy + Sub<T, Output = T> 
-{
+pub fn sub_scalar(a: Vec3, s: f64) -> Vec3 {
   Vec3::new(
-      a.x - s,
-      a.y - s,
-      a.z - s
+    a.x - s,
+    a.y - s,
+    a.z - s
   )
 }
 
-pub fn dot<T>(a: Vec3<T>, b: Vec3<T>) -> T where
-  T: Copy + Add<T, Output = T> + Mul<T, Output = T>
-{
+pub fn dot(a: &Vec3, b: &Vec3) -> f64 {
   (a.x * b.x) + (a.y * b.y) + (a.z * b.z)
 }
 
-pub fn dot_scalar<T>(a: Vec3<T>, s: T) -> Vec3<T> where
-  T: Copy + Add<T, Output = T> + Mul<T, Output = T>
-{
+pub fn dot_scalar(a: &Vec3, s: f64) -> Vec3 {
   Vec3::new(
     a.x * s,
     a.y * s,
@@ -79,7 +65,7 @@ pub fn dot_scalar<T>(a: Vec3<T>, s: T) -> Vec3<T> where
 
 #[cfg(test)]
 mod tests {
-  use super::{ 
+  use super::{
     Vec3,
     add,
     add_scalar,
@@ -91,7 +77,7 @@ mod tests {
 
   #[test]
   fn validate_default_values() {
-      let vector: Vec3<f32> = Vec3::default();
+      let vector: Vec3 = Vec3::default();
       assert_eq!(vector.x, 0.0);
       assert_eq!(vector.y, 0.0);
       assert_eq!(vector.z, 0.0);
@@ -99,7 +85,7 @@ mod tests {
 
   #[test]
   fn validate_fmt() {
-      let vector: Vec3<f32> = Vec3::default();
+      let vector: Vec3 = Vec3::default();
       assert_eq!(vector.to_string(), "[0,0,0]");
   }
 
@@ -135,7 +121,7 @@ mod tests {
   fn sub_function_validation() {
     let a = Vec3::new(2.0,2.0, 2.0);
     let b = Vec3::new(3.0,3.0, 3.0);
-    let c = sub(a, b);
+    let c = sub(&a, &b);
     assert_eq!(c.x, -1.0);
     assert_eq!(c.y, -1.0);
     assert_eq!(c.z, -1.0);
@@ -155,7 +141,7 @@ mod tests {
   fn dot_function_validation() {
     let a = Vec3::new(2.0,2.0, 2.0);
     let b = Vec3::new(2.0,2.0, 2.0);
-    let c = dot(a, b);
+    let c = dot(&a, &b);
     assert_eq!(c, 12.0);
   }
 
@@ -163,7 +149,7 @@ mod tests {
   fn dot_scalar_function_validation() {
     let a = Vec3::new(2.0,2.0, 2.0);
     let b = 3.0;
-    let c = dot_scalar(a, b);
+    let c = dot_scalar(&a, b);
     assert_eq!(c.x, 6.0);
     assert_eq!(c.y, 6.0);
     assert_eq!(c.z, 6.0);
