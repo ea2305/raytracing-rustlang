@@ -19,7 +19,7 @@ impl Vec3 {
   }
 }
 
-pub fn add(a: Vec3, b: Vec3) -> Vec3 {
+pub fn add(a: &Vec3, b: &Vec3) -> Vec3 {
   Vec3::new(
     a.x + b.x,
     a.y + b.y,
@@ -27,7 +27,7 @@ pub fn add(a: Vec3, b: Vec3) -> Vec3 {
   )
 }
 
-pub fn add_scalar(a: Vec3, s: f64) -> Vec3 {
+pub fn add_scalar(a: &Vec3, s: f64) -> Vec3 {
   Vec3::new(
     a.x + s,
     a.y + s,
@@ -43,7 +43,7 @@ pub fn sub(a: &Vec3, b: &Vec3) -> Vec3 {
   )
 }
 
-pub fn sub_scalar(a: Vec3, s: f64) -> Vec3 {
+pub fn sub_scalar(a: &Vec3, s: f64) -> Vec3 {
   Vec3::new(
     a.x - s,
     a.y - s,
@@ -63,6 +63,10 @@ pub fn dot_scalar(a: &Vec3, s: f64) -> Vec3 {
   )
 }
 
+pub fn length(a: &Vec3) -> f64 {
+  f64::sqrt(dot(&a, &a))
+}
+
 #[cfg(test)]
 mod tests {
   use super::{
@@ -72,7 +76,8 @@ mod tests {
     sub,
     sub_scalar,
     dot,
-    dot_scalar
+    dot_scalar,
+    length
   };
 
   #[test]
@@ -101,7 +106,7 @@ mod tests {
   fn add_function_validation() {
       let a = Vec3::new(2.0,2.0, 2.0);
       let b = Vec3::new(2.0,2.0, 2.0);
-      let c = add(a, b);
+      let c = add(&a, &b);
       assert_eq!(c.x, 4.0);
       assert_eq!(c.y, 4.0);
       assert_eq!(c.z, 4.0);
@@ -111,7 +116,7 @@ mod tests {
   fn add_scalar_function_validation() {
       let a = Vec3::new(2.0,2.0, 2.0);
       let b = 2.0;
-      let c = add_scalar(a, b);
+      let c = add_scalar(&a, b);
       assert_eq!(c.x, 4.0);
       assert_eq!(c.y, 4.0);
       assert_eq!(c.z, 4.0);
@@ -131,7 +136,7 @@ mod tests {
   fn sub_scalar_function_validation() {
     let a = Vec3::new(2.0,2.0, 2.0);
     let b = 3.0;
-    let c = sub_scalar(a, b);
+    let c = sub_scalar(&a, b);
     assert_eq!(c.x, -1.0);
     assert_eq!(c.y, -1.0);
     assert_eq!(c.z, -1.0);
@@ -153,5 +158,12 @@ mod tests {
     assert_eq!(c.x, 6.0);
     assert_eq!(c.y, 6.0);
     assert_eq!(c.z, 6.0);
+  }
+
+  #[test]
+  fn calculates_length_of_vector() {
+    let a = Vec3::new(1.0,1.0, 1.0);
+    let length = length(&a);
+    assert_eq!(length, f64::sqrt(3.0));
   }
 }
