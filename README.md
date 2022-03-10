@@ -2,7 +2,7 @@
 
 <img src="./public/output.png" width="300">
 
-Implements simple functinoalities of raytracing:
+Implements simple functionalities of raytracing:
 - Shapes
 - Lights
 - Shadows
